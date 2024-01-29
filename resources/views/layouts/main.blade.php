@@ -23,12 +23,19 @@
                 </button>
             <div class="collapse navbar-collapse" id="edicaMainNav">
                 <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('blog.index') }}">Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('personal.main.index') }}">Personal page</a>
-                    </li>
+                    @auth()
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('blog.index') }}">Posts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('personal.main.index') }}">Personal page</a>
+                        </li>
+                    @endauth
+                    @guest()
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('personal.main.index') }}">Login</a>
+                        </li>
+                    @endguest
                 </ul>
             </div>
         </nav>
