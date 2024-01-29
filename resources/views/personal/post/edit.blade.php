@@ -27,7 +27,8 @@
                 <!-- Small boxes (Stat box) -->
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ route('personal.post.update', $post->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('personal.post.update', $post->id) }}" method="POST"
+                              enctype="multipart/form-data">
                             @method('PATCH')
                             @csrf
                             <div class="form-group w-25">
@@ -58,17 +59,26 @@
                                 @enderror
                             </div>
                             <div class="form-group w-50">
-                                <label>Category</label>
-                                <select class="form-control" name="category_id">
-                                    @foreach($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                    {{ $category->id == $post->category_id ? ' selected' : '' }}
-                                    >{{ $category->title }}</option>
+                                <label>Tags</label>
+                                <select class="select2" multiple="multiple" name="tag_ids[]"
+                                        data-placeholder="Choose tags" style="width: 100%;" id="tag-select">
+
+                                    @foreach($tags as $tag)
+                                        <option
+                                            {{ is_array($post->tags->toArray()) && in_array($tag->id, $post->tags->pluck('id')->toArray()) ? ' selected' : '' }}
+                                            value="{{ $tag->id }}">
+                                            {{ $tag->title }}
+                                        </option>
                                     @endforeach
+                                        <option value="__new__">Add New Tag</option>
                                 </select>
-                                <div class="form-group mt-3">
-                            <input type="submit" class="btn btn-primary" value="Edit ">
-                                </div>
+                                @error('tag_ids')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group mt-3">
+                                <input type="submit" class="btn btn-primary" value="Edit ">
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -81,5 +91,36 @@
         </section>
         <!-- /.content -->
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function isNumeric(str) {
+            // Use a regular expression to check if the string contains only numbers
+            return /^\d+$/.test(str);
+        }
+
+        $(document).ready(function() {
+            $('#tag-select').select2();
+
+            $('#tag-select').on('select2:selecting', function(e) {
+                var selectedTag = e.params.args.data.text;
+
+                if (selectedTag === 'Add New Tag') {
+                    var newTag = prompt('Enter the new tag:');
+                    if (newTag) {
+                        if(isNumeric(newTag))
+                        {
+                            alert('tag can not be number')
+                        }
+                        else{
+                            var option = new Option(newTag, newTag, true, true);
+                            $('#tag-select').append(option).trigger('change');
+                        }
+                    }
+                    e.preventDefault();
+                }
+            });
+        });
+
+    </script>
     <!-- /.content-wrapper -->
 @endsection

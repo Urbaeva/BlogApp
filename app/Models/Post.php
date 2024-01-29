@@ -14,8 +14,13 @@ class Post extends Model
     protected $table = 'posts';
     protected $guarded = false;
 
-    public function category()
+    public function user()
     {
-        return $this->belongsTo(Category::class, 'category_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tags');
     }
 }

@@ -12,15 +12,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('personal.category.index') }}" class="nav-link">
-                    <i class="nav-icon fas fa-th-list"></i>
-                    <p>
-                        Categories
-                    </p>
-                </a>
-            </li>
-
-            <li class="nav-item">
                 <a href="{{ route('personal.post.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-clipboard"></i>
                     <p>

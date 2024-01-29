@@ -7,6 +7,7 @@ use App\Http\Requests\Post\StoreRequest;
 use App\Http\Requests\Post\UpdateRequest;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Services\PostService;
 
 class PostController extends Controller
@@ -26,13 +27,14 @@ class PostController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
-        return view('personal.post.create', compact('categories'));
+        $tags = Tag::all();
+        return view('personal.post.create', compact('tags'));
     }
 
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
+        $data['user_id'] = auth()->user()->id;
         $this->service->store($data);
         return redirect()->route('personal.post.index');
     }
@@ -44,8 +46,8 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        $categories = Category::all();
-        return view('personal.post.edit', compact('post','categories'));
+        $tags = Tag::all();
+        return view('personal.post.edit', compact('post','tags'));
     }
 
     public function update(UpdateRequest $request, Post $post)
@@ -60,4 +62,5 @@ class PostController extends Controller
         $post->delete();
         return redirect()->route('personal.post.index');
     }
+
 }
