@@ -12,7 +12,6 @@ class IndexController extends Controller
     public function index()
     {
         $data = [];
-        $data['categoriesCount'] = Category::all()->count();
         $data['postsCount'] = Post::all()->count();
         return view('personal.main.index', compact('data'));
     }

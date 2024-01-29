@@ -16,13 +16,13 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->string('image');
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('user_id');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->index('category_id', 'post_category_idx');
+            $table->index('user_id', 'post_user_idx');
 
-            $table->foreign('category_id', 'post_category_fk')->on('categories')->references('id');
+            $table->foreign('user_id', 'post_user_fk')->on('users')->references('id');
         });
     }
 

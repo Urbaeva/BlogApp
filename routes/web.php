@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Personal\Category\CategoryController;
 use App\Http\Controllers\Personal\IndexController;
 use App\Http\Controllers\Personal\Post\PostController;
+use App\Http\Controllers\Personal\TagController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -17,18 +17,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'personal'], function (){
+Route::group(['prefix' => 'personal',  'middleware'=>'auth'], function (){
     Route::get('/', [IndexController::class, 'index'])->name('personal.main.index');
 
-    Route::group(['prefix'=>'categories'], function (){
-        Route::get('/', [CategoryController::class, 'index'])->name('personal.category.index');
-        Route::get('/create', [CategoryController::class, 'create'])->name('personal.category.create');
-        Route::post('/create', [CategoryController::class, 'store'])->name('personal.category.store');
-        Route::get('/{category}', [CategoryController::class, 'show'])->name('personal.category.show');
-        Route::get('/{category}/edit', [CategoryController::class, 'edit'])->name('personal.category.edit');
-        Route::patch('/{category}', [CategoryController::class, 'update'])->name('personal.category.update');
-        Route::delete('/{category}', [CategoryController::class, 'delete'])->name('personal.category.delete');
-    });
 
     Route::group(['prefix'=>'posts'], function (){
             Route::get('/', [PostController::class, 'index'])->name('personal.post.index');
@@ -39,7 +30,9 @@ Route::group(['prefix' => 'personal'], function (){
             Route::patch('/{post}', [PostController::class, 'update'])->name('personal.post.update');
             Route::delete('/{post}', [PostController::class, 'delete'])->name('personal.post.delete');
     });
-
+    Route::group(['prefix' => 'tags'], function (){
+        Route::get('/get/titles', [TagController::class, 'getTitles'])->name('tags.get.titles');
+    });
 });
 
 Auth::routes();

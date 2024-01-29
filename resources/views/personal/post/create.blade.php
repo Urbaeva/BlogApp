@@ -58,14 +58,19 @@
                                 @enderror
                             </div>
                             <div class="form-group w-50">
-                                <label>Category</label>
-                                <select class="form-control" name="category_id">
-                                    @foreach($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                   {{ $category->id == old('category_id') ? ' selected' : '' }}
-                                    >{{ $category->title }}</option>
+                                <label>Tags</label>
+                                <select class="select2" multiple="multiple" name="tag_ids[]" data-placeholder="Choose tags" style="width: 100%;" id="tag-select">
+                                    @foreach($tags as $tag)
+                                        <option {{ is_array(old('tag_ids')) && in_array($tag->id, old('tag_ids')) ? ' selected' : '' }}
+                                                value="{{ $tag->id }}">
+                                            {{ $tag->title }}
+                                        </option>
                                     @endforeach
+                                    <option value="__new__">Add New Tag</option>
                                 </select>
+                                @error('tag_ids')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <input type="submit" class="btn btn-primary mt-2" value="Add">
@@ -83,4 +88,48 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function getTagTitles()
+        {
+            let url = "{{route('tags.get.titles')}}";
+            fetch(url, {
+                headers: {
+                    'X-CSRF-TOKEN': "{{csrf_token()}}"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console(data);
+                });
+        }
+        getTagTitles();
+        function isNumeric(str) {
+            // Use a regular expression to check if the string contains only numbers
+            return /^\d+$/.test(str);
+        }
+
+        $(document).ready(function() {
+            $('#tag-select').select2();
+
+            $('#tag-select').on('select2:selecting', function(e) {
+                var selectedTag = e.params.args.data.text;
+
+                if (selectedTag === 'Add New Tag') {
+                    var newTag = prompt('Enter the new tag:');
+                    if (newTag) {
+                        if(isNumeric(newTag))
+                        {
+                            alert('tag can not be number')
+                        }
+                        else{
+                            var option = new Option(newTag, newTag, true, true);
+                            $('#tag-select').append(option).trigger('change');
+                        }
+                    }
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 @endsection

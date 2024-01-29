@@ -25,7 +25,8 @@ class UpdateRequest extends FormRequest
             'title'=>'required|string',
             'content'=>'required|string',
             'image'=>'nullable|file',
-            'category_id'=>'required|integer|exists:categories,id'
+            'tag_ids'=>'nullable|array',
+            'tag_ids.*'=>'nullable',
         ];
     }
 
@@ -38,8 +39,6 @@ class UpdateRequest extends FormRequest
             'content.string' => 'Content should be text format',
             'image.required' => 'Image is required',
             'image.file' => 'Image should be file',
-            'category_id.required' => 'Category should be chosen',
-            'category_id.exists' => 'Category should be in database',
         ];
     }
 }
