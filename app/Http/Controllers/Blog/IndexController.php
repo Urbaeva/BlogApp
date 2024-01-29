@@ -15,7 +15,7 @@ class IndexController extends Controller
         $popularPosts = [];
         if(count($posts)) {
             $randomPosts = Post::inRandomOrder()->limit(4)->get();
-            $popularPosts = Post::inRandomOrder()->limit(4)->get(); // it should be changed, when i add likes and comments
+            $popularPosts = Post::withCount('likedUsers')->orderBy('liked_users_count', 'DESC')->get()->take(3);
         }
         return view('blog.index', compact('posts', 'randomPosts', 'popularPosts'));
     }

@@ -7,7 +7,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Dashboard</h1>
+                        <h1 class="m-0">{{ $user->name }}</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -44,8 +44,8 @@
                         <!-- small box -->
                         <div class="small-box bg-warning">
                             <div class="inner">
-                                <h3> 43  <sup style="font-size: 20px"></sup></h3>
-                                <p>Comments</p>
+                                <h3> {{ $data['commentsCount'] }}  <sup style="font-size: 20px"></sup></h3>
+                                <p>My comments</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-comment"></i>
@@ -58,8 +58,8 @@
                         <!-- small box -->
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3> 43</h3>
-                                <p>Liked posts</p>
+                                <h3>{{ $data['likesCount'] }}</h3>
+                                <p>My liked posts</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-heart"></i>

@@ -13,12 +13,15 @@ class PostService
     {
         try {
             DB::beginTransaction();
-            $data['image'] = Storage::disk('public')->put('/images', $data['image']);
-            $tags = $this->tagsHandle($data['tag_ids']);
 
+            $data['image'] = Storage::disk('public')->put('/images', $data['image']);
+            $tags = isset($data['tag_ids']) ? $this->tagsHandle($data['tag_ids']) : [];
             unset($data['tag_ids']);
             $post = Post::create($data);
-            $post->tags()->attach($tags);
+
+            if (!empty($tags)) {
+                $post->tags()->attach($tags);
+            }
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
@@ -26,20 +29,24 @@ class PostService
         }
     }
 
+
     public function update($data, $post)
     {
         try {
             DB::beginTransaction();
-            $tags = $this->tagsHandle($data['tag_ids']);
+            $tags = isset($data['tag_ids']) ? $this->tagsHandle($data['tag_ids']) : [];
             unset($data['tag_ids']);
             if (isset($data['image'])) {
                 $data['image'] = Storage::disk('public')->put('/images', $data['image']);
             }
             $post->update($data);
-            $post->tags()->sync($tags);
+            if (!empty($tags)) {
+                $post->tags()->sync($tags);
+            }
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
+            dd($exception->getMessage());
             abort(500);
         }
     }

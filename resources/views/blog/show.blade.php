@@ -59,6 +59,42 @@
                             </div>
                         </section>
                     @endif
+                        <section class="comment-list mb-5">
+                            <h2 class="section-title mb-5" data-aos="fade-up">Comments ({{ $post->comments->count() }})</h2>
+                            @foreach($post->comments as $comment)
+                                <div class="card-comment">
+                                    <div class="comment-text mt-3">
+                        <span class="username">
+                            <div>
+                                {{ $comment->user->name }}
+                            </div>
+                          <span class="text-muted float-right">{{ $comment->DateAsCarbon->diffForHumans() }}</span>
+                        </span><!-- /.username -->
+                                        {{ $comment->message }}
+                                    </div>
+                                </div>
+                            @endforeach
+                        </section>
+                        @auth()
+                            <section class="comment-section">
+                                <h2 class="section-title mb-5" data-aos="fade-up">Send comment</h2>
+                                <form action="{{ route('post.comment.store', $post->id) }}" method="post">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="form-group col-12" data-aos="fade-up">
+                                            <label for="message" class="sr-only">Comment</label>
+                                            <textarea name="message" id="message" class="form-control"
+                                                      placeholder="Write comment" rows="10"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12" data-aos="fade-up">
+                                            <input type="submit" value="Send Message" class="btn btn-warning">
+                                        </div>
+                                    </div>
+                                </form>
+                            </section>
+                        @endauth
                 </div>
             </div>
         </div>
